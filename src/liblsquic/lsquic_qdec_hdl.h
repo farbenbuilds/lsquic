@@ -25,6 +25,8 @@ struct qpack_dec_hdl
         QDH_CONN_ABORTED    = 1 << 1,
         QDH_SAVE_UA         = 1 << 2,
         QDH_SERVER          = 1 << 3,
+        QDH_HSI_HEADER_ERROR = 1 << 4,
+        QDH_HSI_RESOURCE_ERROR = 1 << 5,
     }                        qdh_flags;
     struct lsqpack_dec       qdh_decoder;
     struct lsquic_stream    *qdh_enc_sm_in;
@@ -70,6 +72,9 @@ lsquic_qdh_header_in_begin (struct qpack_dec_hdl *, struct lsquic_stream *,
 enum lsqpack_read_header_status
 lsquic_qdh_header_in_continue (struct qpack_dec_hdl *, struct lsquic_stream *,
                                 const unsigned char **, size_t);
+
+int
+lsquic_qdh_take_hsi_error (struct qpack_dec_hdl *);
 
 void
 lsquic_qdh_cancel_stream (struct qpack_dec_hdl *,

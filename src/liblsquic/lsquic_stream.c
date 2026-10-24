@@ -5097,6 +5097,13 @@ hq_read (void *ctx, const unsigned char *buf, size_t sz, int fin)
                     assert(LQRHS_ERROR == rhs);
                     stream->sm_qflags &= ~SMQF_QPACK_DEC;
                     filter->hqfi_flags |= HQFI_FLAG_ERROR;
+                    if (lsquic_qdh_take_hsi_error(
+                                        stream->conn_pub->u.ietf.qdh))
+                    {
+                        filter->hqfi_left = 0;
+                        filter->hqfi_state = HQFI_STATE_FRAME_HEADER_BEGIN;
+                        goto end;
+                    }
                     LSQ_INFO("error processing header block");
                     abort_connection(stream);   /* XXX Overkill? */
                     goto end;
